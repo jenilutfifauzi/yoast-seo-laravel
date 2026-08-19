@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Jenlut\YoastSeoLaravel;
 
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Jenlut\YoastSeoLaravel\Console\Commands\YoastSeoLaravelCommand;
 
@@ -25,6 +28,10 @@ class YoastSeoLaravelServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        RateLimiter::for('seo', static fn (Request $request) => Limit::perMinute(60)->by(
+            $request->user()?->getAuthIdentifier() ?? $request->ip(),
+        ));
+
         $this->loadRoutesFrom(__DIR__.'/../routes/yoast-seo-laravel.php');
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'yoast-seo');

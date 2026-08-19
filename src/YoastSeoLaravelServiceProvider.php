@@ -8,7 +8,10 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Jenlut\YoastSeoLaravel\Console\Commands\IndexCommand;
+use Jenlut\YoastSeoLaravel\Console\Commands\InvalidateCommand;
 use Jenlut\YoastSeoLaravel\Console\Commands\YoastSeoLaravelCommand;
+use Jenlut\YoastSeoLaravel\Indexables\IndexableResolver;
 
 class YoastSeoLaravelServiceProvider extends ServiceProvider
 {
@@ -21,6 +24,7 @@ class YoastSeoLaravelServiceProvider extends ServiceProvider
 
         $this->app->singleton(YoastSeoLaravel::class);
         $this->app->singleton(SeoManager::class);
+        $this->app->singleton(IndexableResolver::class);
     }
 
     /**
@@ -64,6 +68,8 @@ class YoastSeoLaravelServiceProvider extends ServiceProvider
 
         $this->commands([
             YoastSeoLaravelCommand::class,
+            IndexCommand::class,
+            InvalidateCommand::class,
         ]);
     }
 }

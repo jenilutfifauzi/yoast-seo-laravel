@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Jenlut\YoastSeoLaravel;
 
 use Jenlut\YoastSeoLaravel\Data\CanonicalUrl;
+use Jenlut\YoastSeoLaravel\Data\IndexableData;
 use Jenlut\YoastSeoLaravel\Data\RobotsDirective;
 use Jenlut\YoastSeoLaravel\Data\SeoDocument;
 use Jenlut\YoastSeoLaravel\Presenters\SeoHeadPresenter;
@@ -83,6 +84,22 @@ class SeoManager implements Contracts\SeoManager
     public function document(): SeoDocument
     {
         return $this->document;
+    }
+
+    public function fromIndexable(IndexableData $data): self
+    {
+        $manager = clone $this;
+        $manager->document = new SeoDocument(
+            title: $data->title,
+            description: $data->description,
+            canonical: $data->canonical,
+            robots: $data->robots,
+            openGraph: $data->openGraph,
+            twitter: $data->twitter,
+            schema: $data->schema,
+        );
+
+        return $manager;
     }
 
     public function render(): string

@@ -13,15 +13,15 @@ it('returns the same instance from the container', function () {
 });
 
 it('merges the package config', function () {
-    expect(config('yoast-seo-laravel.placeholder'))->toBe('default');
+    expect(config('yoast-seo.enabled'))->toBeTrue();
 });
 
 it('loads the package translations', function () {
-    expect(trans('yoast-seo-laravel::messages.placeholder'))->toBe('YoastSeoLaravel placeholder translation.');
+    expect(trans('yoast-seo::messages.placeholder'))->toBe('YoastSeoLaravel placeholder translation.');
 });
 
 it('loads the package views', function () {
-    expect(view()->exists('yoast-seo-laravel::placeholder'))->toBeTrue();
+    expect(view()->exists('yoast-seo::placeholder'))->toBeTrue();
 });
 
 it('registers the artisan command', function () {

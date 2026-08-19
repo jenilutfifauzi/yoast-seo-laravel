@@ -67,8 +67,8 @@ it('does not keep the generated skeleton identity', function () {
         ->not->toContain('VendorName\\Skeleton');
 });
 
-it('keeps the generated package boot surface available', function () {
-    expect(config('yoast-seo-laravel.placeholder'))->toBe('default');
+it('keeps the package boot surface available', function () {
+    expect(config('yoast-seo.enabled'))->toBeTrue();
 
     $this->artisan('yoast-seo-laravel:placeholder')->assertSuccessful();
 });

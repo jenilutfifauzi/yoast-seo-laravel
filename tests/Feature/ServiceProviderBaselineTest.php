@@ -13,9 +13,9 @@ it('boots the package provider and resolves the singleton binding', function () 
 });
 
 it('loads package resources from the provider', function () {
-    expect(config('yoast-seo-laravel.placeholder'))->toBe('default')
-        ->and(view()->exists('yoast-seo-laravel::placeholder'))->toBeTrue()
-        ->and(trans('yoast-seo-laravel::messages.placeholder'))
+    expect(config('yoast-seo.enabled'))->toBeTrue()
+        ->and(view()->exists('yoast-seo::placeholder'))->toBeTrue()
+        ->and(trans('yoast-seo::messages.placeholder'))
         ->toBe('YoastSeoLaravel placeholder translation.');
 });
 

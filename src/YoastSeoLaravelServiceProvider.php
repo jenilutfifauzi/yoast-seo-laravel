@@ -14,7 +14,7 @@ class YoastSeoLaravelServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/yoast-seo-laravel.php', 'yoast-seo-laravel');
+        $this->mergeConfigFrom(__DIR__.'/../config/yoast-seo.php', 'yoast-seo');
 
         $this->app->singleton(YoastSeoLaravel::class);
     }
@@ -26,33 +26,33 @@ class YoastSeoLaravelServiceProvider extends ServiceProvider
     {
         $this->loadRoutesFrom(__DIR__.'/../routes/yoast-seo-laravel.php');
 
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'yoast-seo-laravel');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'yoast-seo');
 
-        $this->loadTranslationsFrom(__DIR__.'/../lang', 'yoast-seo-laravel');
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'yoast-seo');
 
         if (! $this->app->runningInConsole()) {
             return;
         }
 
         $this->publishes([
-            __DIR__.'/../config/yoast-seo-laravel.php' => config_path('yoast-seo-laravel.php'),
-        ], ['yoast-seo-laravel', 'yoast-seo-laravel-config']);
+            __DIR__.'/../config/yoast-seo.php' => config_path('yoast-seo.php'),
+        ], ['yoast-seo', 'yoast-seo-config']);
 
         $this->publishes([
-            __DIR__.'/../resources/views' => resource_path('views/vendor/yoast-seo-laravel'),
-        ], ['yoast-seo-laravel', 'yoast-seo-laravel-views']);
+            __DIR__.'/../resources/views' => resource_path('views/vendor/yoast-seo'),
+        ], ['yoast-seo', 'yoast-seo-views']);
 
         $this->publishes([
-            __DIR__.'/../lang' => $this->app->langPath('vendor/yoast-seo-laravel'),
-        ], ['yoast-seo-laravel', 'yoast-seo-laravel-lang']);
+            __DIR__.'/../lang' => $this->app->langPath('vendor/yoast-seo'),
+        ], ['yoast-seo', 'yoast-seo-lang']);
 
         $this->publishes([
-            __DIR__.'/../public' => public_path('vendor/yoast-seo-laravel'),
-        ], ['yoast-seo-laravel', 'yoast-seo-laravel-assets']);
+            __DIR__.'/../public' => public_path('vendor/yoast-seo'),
+        ], ['yoast-seo', 'yoast-seo-assets']);
 
         $this->publishesMigrations([
             __DIR__.'/../database/migrations' => database_path('migrations'),
-        ], ['yoast-seo-laravel', 'yoast-seo-laravel-migrations']);
+        ], ['yoast-seo', 'yoast-seo-migrations']);
 
         $this->commands([
             YoastSeoLaravelCommand::class,

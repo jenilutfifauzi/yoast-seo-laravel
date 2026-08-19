@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace YoastSeoLaravel\YoastSeoLaravel;
+namespace Jenlut\YoastSeoLaravel;
 
 use Illuminate\Support\ServiceProvider;
-use YoastSeoLaravel\YoastSeoLaravel\Console\Commands\YoastSeoLaravelCommand;
+use Jenlut\YoastSeoLaravel\Console\Commands\YoastSeoLaravelCommand;
 
 class YoastSeoLaravelServiceProvider extends ServiceProvider
 {

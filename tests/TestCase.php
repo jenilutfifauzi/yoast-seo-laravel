@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace YoastSeoLaravel\YoastSeoLaravel\Tests;
+namespace Jenlut\YoastSeoLaravel\Tests;
 
+use Jenlut\YoastSeoLaravel\YoastSeoLaravelServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use YoastSeoLaravel\YoastSeoLaravel\YoastSeoLaravelServiceProvider;
 
 abstract class TestCase extends Orchestra
 {

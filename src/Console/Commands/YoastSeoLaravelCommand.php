@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YoastSeoLaravel\YoastSeoLaravel\Console\Commands;
+namespace Jenlut\YoastSeoLaravel\Console\Commands;
 
 use Illuminate\Console\Command;
 

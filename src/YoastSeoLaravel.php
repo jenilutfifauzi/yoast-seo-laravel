@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YoastSeoLaravel\YoastSeoLaravel;
+namespace Jenlut\YoastSeoLaravel;
 
 class YoastSeoLaravel
 {

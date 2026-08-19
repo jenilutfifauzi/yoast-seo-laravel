@@ -2,6 +2,6 @@
 
 declare(strict_types=1);
 
-use YoastSeoLaravel\YoastSeoLaravel\Tests\TestCase;
+use Jenlut\YoastSeoLaravel\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

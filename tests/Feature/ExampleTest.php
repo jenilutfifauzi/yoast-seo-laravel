@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use YoastSeoLaravel\YoastSeoLaravel\YoastSeoLaravel;
+use Jenlut\YoastSeoLaravel\YoastSeoLaravel;
 
 it('resolves the singleton', function () {
     expect(app(YoastSeoLaravel::class))->toBeInstanceOf(YoastSeoLaravel::class);

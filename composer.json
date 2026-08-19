@@ -1,17 +1,18 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "jeni/yoast-seo-laravel",
-    "description": "",
+    "name": "jenlut/yoast-seo-laravel",
+    "description": "Laravel-native bridge for Yoast SEO concepts and workflows.",
     "keywords": [
         "laravel",
-        "jeni",
-        "yoast-seo-laravel"
+        "seo",
+        "yoast",
+        "yoast-seo"
     ],
-    "homepage": "https://github.com/jeni/yoast-seo-laravel",
+    "homepage": "https://github.com/jenlut/yoast-seo-laravel",
     "license": "MIT",
     "authors": [
         {
-            "name": "jeni",
+            "name": "Jen Lut Fauzi",
             "email": "jenilutfifauzi@gmail.com",
             "role": "Developer"
         }
@@ -32,12 +33,12 @@
     },
     "autoload": {
         "psr-4": {
-            "YoastSeoLaravel\\YoastSeoLaravel\\": "src/"
+            "Jenlut\\YoastSeoLaravel\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "YoastSeoLaravel\\YoastSeoLaravel\\Tests\\": "tests/",
+            "Jenlut\\YoastSeoLaravel\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/",
             "Workbench\\Database\\Factories\\": "workbench/database/factories/",
             "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
@@ -87,10 +88,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "YoastSeoLaravel\\YoastSeoLaravel\\YoastSeoLaravelServiceProvider"
+                "Jenlut\\YoastSeoLaravel\\YoastSeoLaravelServiceProvider"
             ],
             "aliases": {
-                "YoastSeoLaravel": "YoastSeoLaravel\\YoastSeoLaravel\\Facades\\YoastSeoLaravel"
+                "YoastSeo": "Jenlut\\YoastSeoLaravel\\Facades\\YoastSeo"
             }
         }
     },

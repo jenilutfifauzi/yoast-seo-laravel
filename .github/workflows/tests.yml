@@ -52,6 +52,9 @@ jobs:
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress --no-scripts
           composer run prepare
 
+      - name: Validate Composer metadata
+        run: composer validate --strict
+
       - name: PHPStan
         run: composer analyse
 

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Jenlut\YoastSeoLaravel\Facades\YoastSeo;
-use Jenlut\YoastSeoLaravel\YoastSeoLaravel;
+use Jenlut\YoastSeoLaravel\SeoManager;
 use Jenlut\YoastSeoLaravel\YoastSeoLaravelServiceProvider;
 
 function packageRoot(): string
@@ -58,7 +58,7 @@ it('resolves the final provider and facade classes', function () {
     expect(app()->getProvider(YoastSeoLaravelServiceProvider::class))
         ->not->toBeNull()
         ->and(YoastSeo::getFacadeRoot())
-        ->toBeInstanceOf(YoastSeoLaravel::class);
+        ->toBeInstanceOf(SeoManager::class);
 });
 
 it('does not keep the generated skeleton identity', function () {

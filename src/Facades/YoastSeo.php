@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Jenlut\YoastSeoLaravel\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Jenlut\YoastSeoLaravel\YoastSeoLaravel;
+use Jenlut\YoastSeoLaravel\SeoManager;
 
 /**
- * @see YoastSeoLaravel
+ * @see SeoManager
  */
 class YoastSeo extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return YoastSeoLaravel::class;
+        return SeoManager::class;
     }
 }

@@ -7,6 +7,7 @@ namespace Jenlut\YoastSeoLaravel;
 use Jenlut\YoastSeoLaravel\Data\CanonicalUrl;
 use Jenlut\YoastSeoLaravel\Data\RobotsDirective;
 use Jenlut\YoastSeoLaravel\Data\SeoDocument;
+use Jenlut\YoastSeoLaravel\Presenters\SeoHeadPresenter;
 
 class SeoManager implements Contracts\SeoManager
 {
@@ -84,9 +85,9 @@ class SeoManager implements Contracts\SeoManager
         return $this->document;
     }
 
-    public function render(): SeoDocument
+    public function render(): string
     {
-        return $this->document();
+        return (new SeoHeadPresenter)->present($this->document);
     }
 
     private function withDocument(SeoDocument $document): self

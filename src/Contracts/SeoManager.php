@@ -31,5 +31,5 @@ interface SeoManager
 
     public function document(): SeoDocument;
 
-    public function render(): SeoDocument;
+    public function render(): string;
 }

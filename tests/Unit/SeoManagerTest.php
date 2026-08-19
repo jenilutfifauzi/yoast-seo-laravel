@@ -50,3 +50,10 @@ it('rejects invalid metadata through the manager', function () {
     expect(fn () => (new SeoManager)->for('post:1')->canonical('javascript:alert(1)'))
         ->toThrow(InvalidArgumentException::class);
 });
+
+it('renders the fluent document as safe HTML', function () {
+    expect((new SeoManager)
+        ->for('post:1')
+        ->title('Rendered title')
+        ->render())->toBe('<title>Rendered title</title>');
+});

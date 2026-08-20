@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Jenlut\YoastSeoLaravel\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Events\Dispatcher;
+use Jenlut\YoastSeoLaravel\Contracts\IndexableRepository;
+use Jenlut\YoastSeoLaravel\Events\IndexableInvalidated;
 
 final class InvalidateCommand extends Command
 {
@@ -12,15 +15,29 @@ final class InvalidateCommand extends Command
 
     protected $description = 'Invalidate one SEO indexable identity.';
 
+    public function __construct(
+        private readonly IndexableRepository $repository,
+        private readonly Dispatcher $events,
+    ) {
+        parent::__construct();
+    }
+
     public function handle(): int
     {
-        if ($this->option('type') === null || $this->option('id') === null) {
+        $typeOption = $this->option('type');
+        $idOption = $this->option('id');
+        $type = is_string($typeOption) ? trim($typeOption) : '';
+        $id = is_string($idOption) ? trim($idOption) : '';
+
+        if ($type === '' || $id === '') {
             $this->error('Both --type and --id are required.');
 
             return self::INVALID;
         }
 
-        $this->info('Indexable invalidation requested.');
+        $this->repository->deleteByIdentity($type, $id);
+        $this->events->dispatch(new IndexableInvalidated($type, $id));
+        $this->info("Invalidated {$type}:{$id}.");
 
         return self::SUCCESS;
     }

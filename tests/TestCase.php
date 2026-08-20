@@ -11,6 +11,8 @@ abstract class TestCase extends Orchestra
 {
     protected function getPackageProviders($app): array
     {
+        $app['config']->set('cache.default', 'array');
+
         return [
             YoastSeoLaravelServiceProvider::class,
         ];

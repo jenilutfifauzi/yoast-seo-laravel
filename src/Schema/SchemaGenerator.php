@@ -29,7 +29,13 @@ final readonly class SchemaGenerator
                     continue;
                 }
 
+                $staged = new SchemaGraph;
+
                 foreach ($provider->provide($context, $document) as $node) {
+                    $staged->add($node);
+                }
+
+                foreach ($staged->nodes() as $node) {
                     $graph->add($node);
                 }
             } catch (Throwable) {

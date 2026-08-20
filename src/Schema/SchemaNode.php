@@ -46,9 +46,12 @@ final readonly class SchemaNode
             return false;
         }
 
-        return str_starts_with($id, '#')
-            || filter_var($id, FILTER_VALIDATE_URL) !== false
-                && in_array(parse_url($id, PHP_URL_SCHEME), ['http', 'https'], true);
+        if (str_starts_with($id, '#') || parse_url($id, PHP_URL_SCHEME) === null) {
+            return true;
+        }
+
+        return filter_var($id, FILTER_VALIDATE_URL) !== false
+            && in_array(strtolower((string) parse_url($id, PHP_URL_SCHEME)), ['http', 'https'], true);
     }
 
     private static function validateValues(mixed $value): void

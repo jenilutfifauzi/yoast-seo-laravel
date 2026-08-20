@@ -19,7 +19,8 @@ final readonly class SeoFilterPipeline
     {
         foreach ($this->extensions as $extension) {
             try {
-                $graph = $extension->extend($graph, $context, $document);
+                $staged = $extension->extend(clone $graph, $context, $document);
+                $graph = $staged;
             } catch (Throwable) {
                 // ponytail: optional extensions fail closed; schema output remains available.
                 continue;

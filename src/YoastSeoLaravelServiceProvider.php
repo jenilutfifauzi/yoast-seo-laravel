@@ -27,7 +27,9 @@ class YoastSeoLaravelServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/yoast-seo.php', 'yoast-seo');
 
         $this->app->singleton(YoastSeoLaravel::class);
-        $this->app->singleton(SeoManager::class);
+        $this->app->singleton(SeoManager::class, function (): SeoManager {
+            return new SeoManager(schemaGenerator: $this->app->make(SchemaGenerator::class));
+        });
         $this->app->singleton(IndexableResolver::class);
         $this->app->singleton(SchemaRegistry::class, function (): SchemaRegistry {
             return new SchemaRegistry(iterator_to_array($this->app->tagged('yoast-seo.schema-providers'), false));

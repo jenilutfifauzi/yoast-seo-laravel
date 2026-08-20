@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Blade;
+use Jenlut\YoastSeoLaravel\Data\ContentContext;
 use Jenlut\YoastSeoLaravel\Data\SeoDocument;
 
 it('renders the package head component with an explicit document', function () {
@@ -23,6 +24,17 @@ it('renders the documented Blade component alias', function () {
     );
 
     expect($html)->toContain('<title>Alias title</title>');
+});
+
+it('renders generated schema for an explicit content context', function () {
+    $html = Blade::render(
+        '<x-yoast-seo::head :content="$content" />',
+        ['content' => new ContentContext('post', '1', 'https://example.test/posts/1')],
+    );
+
+    expect($html)
+        ->toContain('<script type="application/ld+json">')
+        ->toContain('"@type":"WebPage"');
 });
 
 it('renders no empty metadata when the component receives no document', function () {

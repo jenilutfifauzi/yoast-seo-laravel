@@ -26,6 +26,18 @@ it('rejects missing or invalid identity fields', function () {
         ->toThrow(SchemaValidationException::class);
 });
 
+it('accepts relative and case-insensitive HTTP identifiers', function () {
+    expect((new SchemaNode(['@type' => 'Thing', '@id' => 'article-1']))->id())
+        ->toBe('article-1')
+        ->and((new SchemaNode(['@type' => 'Thing', '@id' => 'HTTP://example.test/thing']))->id())
+        ->toBe('HTTP://example.test/thing');
+});
+
+it('rejects unsupported identifier schemes', function () {
+    expect(fn () => new SchemaNode(['@type' => 'Thing', '@id' => 'javascript:alert(1)']))
+        ->toThrow(SchemaValidationException::class);
+});
+
 it('rejects executable or object payload values', function () {
     expect(fn () => new SchemaNode([
         '@type' => 'Article',

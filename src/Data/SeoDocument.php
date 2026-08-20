@@ -13,7 +13,7 @@ final readonly class SeoDocument
     /**
      * @param  array<string, mixed>  $openGraph
      * @param  array<string, mixed>  $twitter
-     * @param  array<string, mixed>  $schema
+     * @param  array<string, mixed>|list<array<string, mixed>>  $schema
      */
     public function __construct(
         ?string $title = null,
@@ -65,7 +65,7 @@ final readonly class SeoDocument
         return new self($this->title, $this->description, $this->canonical, $this->robots, $this->openGraph, $twitter, $this->schema);
     }
 
-    /** @param array<string, mixed> $schema */
+    /** @param array<string, mixed>|list<array<string, mixed>> $schema */
     public function withSchema(array $schema): self
     {
         return new self($this->title, $this->description, $this->canonical, $this->robots, $this->openGraph, $this->twitter, $schema);

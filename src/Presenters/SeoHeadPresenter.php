@@ -28,6 +28,13 @@ final class SeoHeadPresenter
             $tags[] = $this->meta('name', 'robots', (string) $document->robots);
         }
 
+        if ($document->schema !== []) {
+            $schema = isset($document->schema[0])
+                ? $document->schema
+                : [$document->schema];
+            $tags[] = (new SchemaPresenter)->present($schema);
+        }
+
         foreach ([
             'og:title' => $document->openGraph['title'] ?? null,
             'og:description' => $document->openGraph['description'] ?? null,

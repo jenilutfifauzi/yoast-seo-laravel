@@ -11,7 +11,11 @@ use Illuminate\Support\ServiceProvider;
 use Jenlut\YoastSeoLaravel\Console\Commands\IndexCommand;
 use Jenlut\YoastSeoLaravel\Console\Commands\InvalidateCommand;
 use Jenlut\YoastSeoLaravel\Console\Commands\YoastSeoLaravelCommand;
+use Jenlut\YoastSeoLaravel\Filters\SeoFilterPipeline;
 use Jenlut\YoastSeoLaravel\Indexables\IndexableResolver;
+use Jenlut\YoastSeoLaravel\Schema\Providers\DefaultSchemaProvider;
+use Jenlut\YoastSeoLaravel\Schema\SchemaGenerator;
+use Jenlut\YoastSeoLaravel\Schema\SchemaRegistry;
 
 class YoastSeoLaravelServiceProvider extends ServiceProvider
 {
@@ -25,6 +29,14 @@ class YoastSeoLaravelServiceProvider extends ServiceProvider
         $this->app->singleton(YoastSeoLaravel::class);
         $this->app->singleton(SeoManager::class);
         $this->app->singleton(IndexableResolver::class);
+        $this->app->singleton(SchemaRegistry::class, function (): SchemaRegistry {
+            return new SchemaRegistry(iterator_to_array($this->app->tagged('yoast-seo.schema-providers'), false));
+        });
+        $this->app->singleton(SeoFilterPipeline::class, function (): SeoFilterPipeline {
+            return new SeoFilterPipeline(iterator_to_array($this->app->tagged('yoast-seo.extensions'), false));
+        });
+        $this->app->singleton(SchemaGenerator::class);
+        $this->app->tag([DefaultSchemaProvider::class], 'yoast-seo.schema-providers');
     }
 
     /**

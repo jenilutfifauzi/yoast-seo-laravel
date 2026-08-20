@@ -9,7 +9,7 @@ final readonly class IndexableData
     /**
      * @param  array<string, mixed>  $openGraph
      * @param  array<string, mixed>  $twitter
-     * @param  array<string, mixed>  $schema
+     * @param  array<string, mixed>|list<array<string, mixed>>  $schema
      */
     public function __construct(
         public string $objectType,

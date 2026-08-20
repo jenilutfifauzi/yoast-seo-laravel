@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Jenlut\YoastSeoLaravel;
 
 use Jenlut\YoastSeoLaravel\Data\CanonicalUrl;
+use Jenlut\YoastSeoLaravel\Data\ContentContext;
 use Jenlut\YoastSeoLaravel\Data\IndexableData;
 use Jenlut\YoastSeoLaravel\Data\RobotsDirective;
 use Jenlut\YoastSeoLaravel\Data\SeoDocument;
 use Jenlut\YoastSeoLaravel\Presenters\SeoHeadPresenter;
+use Jenlut\YoastSeoLaravel\Schema\SchemaGenerator;
+use Jenlut\YoastSeoLaravel\Schema\SchemaNode;
 
 class SeoManager implements Contracts\SeoManager
 {
@@ -16,8 +19,10 @@ class SeoManager implements Contracts\SeoManager
 
     private string|int|object|null $content = null;
 
-    public function __construct(?SeoDocument $document = null)
-    {
+    public function __construct(
+        ?SeoDocument $document = null,
+        private readonly ?SchemaGenerator $schemaGenerator = null,
+    ) {
         $this->document = $document ?? SeoDocument::empty();
     }
 
@@ -75,7 +80,7 @@ class SeoManager implements Contracts\SeoManager
         return $this->withDocument($this->document->withTwitter($twitter));
     }
 
-    /** @param array<string, mixed> $schema */
+    /** @param array<string, mixed>|list<array<string, mixed>> $schema */
     public function schema(array $schema): self
     {
         return $this->withDocument($this->document->withSchema($schema));
@@ -104,7 +109,18 @@ class SeoManager implements Contracts\SeoManager
 
     public function render(): string
     {
-        return (new SeoHeadPresenter)->present($this->document);
+        $document = $this->document;
+
+        if ($this->schemaGenerator !== null
+            && $this->content instanceof ContentContext
+            && $document->schema === []) {
+            $document = $document->withSchema(array_map(
+                static fn (SchemaNode $node): array => $node->toArray(),
+                $this->schemaGenerator->generate($this->content, $document)->nodes(),
+            ));
+        }
+
+        return (new SeoHeadPresenter)->present($document);
     }
 
     private function withDocument(SeoDocument $document): self

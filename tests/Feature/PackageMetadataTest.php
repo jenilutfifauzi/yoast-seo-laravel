@@ -24,7 +24,7 @@ function composerMetadata(): array
 it('uses the final package identity and Laravel discovery metadata', function () {
     $composer = composerMetadata();
 
-    expect($composer['name'])->toBe('jenlut/yoast-seo-laravel')
+    expect($composer['name'])->toBe('jenilutfifauzi/yoast-seo-laravel')
         ->and($composer['autoload']['psr-4'])->toHaveKey('Jenlut\\YoastSeoLaravel\\', 'src/')
         ->and($composer['extra']['laravel']['providers'])
         ->toContain('Jenlut\\YoastSeoLaravel\\YoastSeoLaravelServiceProvider')

@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "jenlut/yoast-seo-laravel",
+    "name": "jenilutfifauzi/yoast-seo-laravel",
     "description": "Laravel-native bridge for Yoast SEO concepts and workflows.",
     "keywords": [
         "laravel",

@@ -13,7 +13,7 @@ Use this skill when a Laravel application needs to integrate the Yoast Seo Larav
 
 ## Primary Goal
 
-- apply the `jeni/yoast-seo-laravel` package's public API in the smallest correct way
+- apply the `jenilutfifauzi/yoast-seo-laravel` package's public API in the smallest correct way
 
 ## Workflow
 

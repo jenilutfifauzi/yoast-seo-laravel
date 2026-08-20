@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Jenlut\YoastSeoLaravel\Indexables;
 
 use Jenlut\YoastSeoLaravel\Contracts\IndexableRepository;
+use Jenlut\YoastSeoLaravel\Models\Indexable;
 
 final class IndexableResolver
 {
@@ -25,7 +26,7 @@ final class IndexableResolver
     public function repository(): IndexableRepository
     {
         return $this->selectedMode === IndexableMode::INDEXED
-            ? new InMemoryIndexableRepository
+            ? new EloquentIndexableRepository(new Indexable)
             : new StatelessIndexableRepository;
     }
 }

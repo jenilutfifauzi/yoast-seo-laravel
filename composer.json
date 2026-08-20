@@ -8,7 +8,7 @@
         "yoast",
         "yoast-seo"
     ],
-    "homepage": "https://github.com/jenlut/yoast-seo-laravel",
+    "homepage": "https://github.com/jenilutfifauzi/yoast-seo-laravel",
     "license": "MIT",
     "authors": [
         {
@@ -19,6 +19,7 @@
     ],
     "require": {
         "php": "^8.3",
+        "illuminate/database": "^12.0||^13.0",
         "illuminate/support": "^12.0||^13.0"
     },
     "require-dev": {

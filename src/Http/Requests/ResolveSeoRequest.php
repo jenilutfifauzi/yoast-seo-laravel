@@ -17,6 +17,9 @@ final class ResolveSeoRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'type' => ['sometimes', 'required_with:id', 'string', 'max:100'],
+            'id' => ['sometimes', 'required_with:type', 'string', 'max:191'],
+            'url' => ['sometimes', 'nullable', 'url:http,https', 'max:2048'],
             'title' => ['sometimes', 'nullable', 'string', 'max:500'],
             'description' => ['sometimes', 'nullable', 'string', 'max:500'],
             'canonical' => ['sometimes', 'nullable', 'url:http,https', 'max:2048'],

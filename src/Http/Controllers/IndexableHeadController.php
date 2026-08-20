@@ -5,21 +5,27 @@ declare(strict_types=1);
 namespace Jenlut\YoastSeoLaravel\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
+use Jenlut\YoastSeoLaravel\Data\ContentContext;
 use Jenlut\YoastSeoLaravel\Data\SeoDocument;
 use Jenlut\YoastSeoLaravel\Http\Requests\ResolveSeoRequest;
 use Jenlut\YoastSeoLaravel\Pipeline\SeoResolutionPipeline;
 use Jenlut\YoastSeoLaravel\Presenters\SeoHeadPresenter;
 use Jenlut\YoastSeoLaravel\Resolvers\DefaultSeoResolver;
 use Jenlut\YoastSeoLaravel\Resolvers\RequestSeoResolver;
+use Jenlut\YoastSeoLaravel\SeoManager;
 
 final class IndexableHeadController
 {
     public function __invoke(ResolveSeoRequest $request): JsonResponse
     {
+        $values = $request->validated();
+        $context = isset($values['type'], $values['id'])
+            ? new ContentContext($values['type'], $values['id'], $values['url'] ?? null)
+            : null;
         $document = (new SeoResolutionPipeline([
-            new RequestSeoResolver($request->validated()),
+            new RequestSeoResolver($values),
             new DefaultSeoResolver,
-        ]))->resolve(SeoDocument::empty());
+        ]))->resolve($context === null ? SeoDocument::empty() : app(SeoManager::class)->for($context)->document());
 
         return response()->json([
             'data' => [

@@ -11,7 +11,10 @@ use Illuminate\Support\ServiceProvider;
 use Jenlut\YoastSeoLaravel\Console\Commands\IndexCommand;
 use Jenlut\YoastSeoLaravel\Console\Commands\InvalidateCommand;
 use Jenlut\YoastSeoLaravel\Console\Commands\YoastSeoLaravelCommand;
+use Jenlut\YoastSeoLaravel\Contracts\IndexableBuilder;
+use Jenlut\YoastSeoLaravel\Contracts\IndexableRepository;
 use Jenlut\YoastSeoLaravel\Filters\SeoFilterPipeline;
+use Jenlut\YoastSeoLaravel\Indexables\DefaultIndexableBuilder;
 use Jenlut\YoastSeoLaravel\Indexables\IndexableResolver;
 use Jenlut\YoastSeoLaravel\Schema\Providers\DefaultSchemaProvider;
 use Jenlut\YoastSeoLaravel\Schema\SchemaGenerator;
@@ -27,8 +30,16 @@ class YoastSeoLaravelServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/yoast-seo.php', 'yoast-seo');
 
         $this->app->singleton(YoastSeoLaravel::class);
+        $this->app->singleton(IndexableBuilder::class, DefaultIndexableBuilder::class);
+        $this->app->singleton(IndexableRepository::class, function (): IndexableRepository {
+            return $this->app->make(IndexableResolver::class)->repository();
+        });
         $this->app->singleton(SeoManager::class, function (): SeoManager {
-            return new SeoManager(schemaGenerator: $this->app->make(SchemaGenerator::class));
+            return new SeoManager(
+                schemaGenerator: $this->app->make(SchemaGenerator::class),
+                indexableRepository: $this->app->make(IndexableRepository::class),
+                indexableBuilder: $this->app->make(IndexableBuilder::class),
+            );
         });
         $this->app->singleton(IndexableResolver::class);
         $this->app->singleton(SchemaRegistry::class, function (): SchemaRegistry {

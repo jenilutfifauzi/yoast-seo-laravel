@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Jenlut\YoastSeoLaravel;
 
+use Jenlut\YoastSeoLaravel\Contracts\IndexableBuilder;
+use Jenlut\YoastSeoLaravel\Contracts\IndexableRepository;
 use Jenlut\YoastSeoLaravel\Data\CanonicalUrl;
 use Jenlut\YoastSeoLaravel\Data\ContentContext;
 use Jenlut\YoastSeoLaravel\Data\IndexableData;
 use Jenlut\YoastSeoLaravel\Data\RobotsDirective;
 use Jenlut\YoastSeoLaravel\Data\SeoDocument;
+use Jenlut\YoastSeoLaravel\Indexables\DefaultIndexableBuilder;
+use Jenlut\YoastSeoLaravel\Indexables\StatelessIndexableRepository;
 use Jenlut\YoastSeoLaravel\Presenters\SeoHeadPresenter;
 use Jenlut\YoastSeoLaravel\Schema\SchemaGenerator;
 use Jenlut\YoastSeoLaravel\Schema\SchemaNode;
@@ -22,6 +26,8 @@ class SeoManager implements Contracts\SeoManager
     public function __construct(
         ?SeoDocument $document = null,
         private readonly ?SchemaGenerator $schemaGenerator = null,
+        private readonly ?IndexableRepository $indexableRepository = null,
+        private readonly ?IndexableBuilder $indexableBuilder = null,
     ) {
         $this->document = $document ?? SeoDocument::empty();
     }
@@ -88,20 +94,22 @@ class SeoManager implements Contracts\SeoManager
 
     public function document(): SeoDocument
     {
-        return $this->document;
+        return $this->content instanceof ContentContext
+            ? $this->resolveIndexable($this->document, $this->content)
+            : $this->document;
     }
 
     public function fromIndexable(IndexableData $data): self
     {
         $manager = clone $this;
         $manager->document = new SeoDocument(
-            title: $data->title,
-            description: $data->description,
-            canonical: $data->canonical,
-            robots: $data->robots,
-            openGraph: $data->openGraph,
-            twitter: $data->twitter,
-            schema: $data->schema,
+            title: $this->document->title ?? $data->title,
+            description: $this->document->description ?? $data->description,
+            canonical: $this->document->canonical ?? $data->canonical,
+            robots: $this->document->robots ?? $data->robots,
+            openGraph: $this->document->openGraph === [] ? $data->openGraph : $this->document->openGraph,
+            twitter: $this->document->twitter === [] ? $data->twitter : $this->document->twitter,
+            schema: $this->document->schema === [] ? $data->schema : $this->document->schema,
         );
 
         return $manager;
@@ -109,7 +117,7 @@ class SeoManager implements Contracts\SeoManager
 
     public function render(): string
     {
-        $document = $this->document;
+        $document = $this->document();
 
         if ($this->schemaGenerator !== null
             && $this->content instanceof ContentContext
@@ -121,6 +129,19 @@ class SeoManager implements Contracts\SeoManager
         }
 
         return (new SeoHeadPresenter)->present($document);
+    }
+
+    private function resolveIndexable(SeoDocument $document, ContentContext $context): SeoDocument
+    {
+        $repository = $this->indexableRepository ?? new StatelessIndexableRepository;
+        $data = $repository->findByIdentity($context->type, $context->identifier);
+
+        if ($data === null) {
+            $builder = $this->indexableBuilder ?? new DefaultIndexableBuilder;
+            $data = $repository->save($builder->build($context));
+        }
+
+        return $this->fromIndexable($data)->document;
     }
 
     private function withDocument(SeoDocument $document): self

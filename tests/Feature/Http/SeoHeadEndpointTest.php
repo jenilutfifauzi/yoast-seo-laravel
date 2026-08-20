@@ -3,6 +3,28 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Jenlut\YoastSeoLaravel\Contracts\IndexableRepository;
+use Jenlut\YoastSeoLaravel\Data\IndexableData;
+use Jenlut\YoastSeoLaravel\Indexables\InMemoryIndexableRepository;
+
+it('uses indexed metadata when content identity is provided', function () {
+    $repository = new InMemoryIndexableRepository;
+    $repository->save(new IndexableData(
+        objectType: 'post',
+        objectId: '1',
+        permalink: 'https://example.test/indexed',
+        permalinkHash: hash('sha256', 'https://example.test/indexed'),
+        title: 'Indexed API title',
+        description: 'Indexed API description',
+    ));
+    $this->app->instance(IndexableRepository::class, $repository);
+
+    $response = $this->getJson('/yoast-seo/head?type=post&id=1');
+
+    $response->assertSuccessful()
+        ->assertJsonPath('data.title', 'Indexed API title')
+        ->assertJsonPath('data.description', 'Indexed API description');
+});
 
 it('returns resolved SEO head JSON', function () {
     $response = $this->getJson('/yoast-seo/head?title=API%20title&description=API%20description');
